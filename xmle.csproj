@@ -12,7 +12,7 @@
         <PackageOutputPath>./nupkg</PackageOutputPath>
 
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageId>XmlEdit</PackageId>
+        <PackageId>VirabShetkar.XmlEdit</PackageId>
         <Authors>Virab Shetkar</Authors>
         <Company>virab.shetkar@outlook.com</Company>
         <Product>XmlEdit</Product>
