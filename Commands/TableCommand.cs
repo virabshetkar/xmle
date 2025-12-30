@@ -24,23 +24,24 @@ public class TableCommand : Command
 
         columnNamesOption = new Option<string[]>("colNames", "-c", "--cols")
         {
-            DefaultValueFactory = res => { return config.GetConfig()?.Columns ?? null; },
+            DefaultValueFactory = res => { return config.GetConfig()?.Columns ?? throw new ArgumentNullException(nameof(columnNamesOption)); },
         };
 
         rootXPathOption = new Option<string>("rootXpath", "-r", "--root")
         {
-            DefaultValueFactory = res => { return config.GetConfig()?.Table ?? null; },
+            DefaultValueFactory = res => { return config.GetConfig()?.Table ?? throw new ArgumentNullException(nameof(rootXPathOption)); },
         };
 
         headingsOption = new Option<string[]>("headings", "-h", "--headings")
         {
-            DefaultValueFactory = res => { return config.GetConfig()?.Headings ?? null; }
+            DefaultValueFactory = res => { return config.GetConfig()?.Headings ?? throw new ArgumentNullException(nameof(headingsOption)); }
         };
 
         Add(columnNamesOption);
         Add(rootXPathOption);
         Add(headingsOption);
         Add(xmlPathArgument);
+
         SetAction(ActionHandler);
     }
 
@@ -96,6 +97,7 @@ public class TableCommand : Command
         {
             if (node is XmlElement el)
             {
+
                 for (int i = 0; i < columnNames.Length - 1; i++)
                 {
                     writer.Write($"{GetValue(el.SelectSingleNode(columnNames[i]))},");
@@ -118,6 +120,9 @@ public class TableCommand : Command
         }
         else if (element is XmlElement)
         {
+            if (element.HasChildNodes && (element.FirstChild is XmlCDataSection || element.FirstChild is XmlText))
+                return element.FirstChild.InnerText;
+
             return element.InnerXml;
         }
 
