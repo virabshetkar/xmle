@@ -2,6 +2,7 @@ using System.CommandLine;
 using System.CommandLine.Parsing;
 
 using xmle.Services;
+using xmle.Utils;
 
 namespace xmle.Commands;
 
@@ -36,22 +37,10 @@ public class ViewCommand : Command
     private async Task ActionHandler(ParseResult result)
     {
         var xmlPath = result.GetValue(xmlPathArgument);
-
-        if (xmlPath == null)
-        {
-            writer.WriteLine("You need to give a path");
-            return;
-        }
-
-        xmlPath = Path.GetFullPath(xmlPath);
-        if (!Path.Exists(xmlPath))
-        {
-            writer.WriteLine("Xml file does not exist!");
-            return;
-        }
+        xmlPath = FileUtil.GetFullPath(xmlPath);
 
         var xpath = result.GetValue(xpathOption);
-        if (xpath == null)
+        if (xpath is null)
         {
             writer.WriteLine("XPath is not given");
             return;
@@ -59,14 +48,7 @@ public class ViewCommand : Command
 
         var xml = xmlService.GetRootXml(xmlPath);
 
-        try
-        {
-            var data = xmlService.GetValueFromXpath(xml, xpath);
-            writer.WriteLine(data);
-        }
-        catch (Exception e)
-        {
-            writer.WriteLine(e.Message);
-        }
+        var data = xmlService.GetValueFromXpath(xml, xpath);
+        writer.WriteLine(data);
     }
 }

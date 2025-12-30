@@ -31,7 +31,7 @@ public class XmlService : IXmlService
     public string GetValueFromXpath(XmlDocument xml, string xpath)
     {
         var el = xml.SelectNodes(xpath);
-        if (el == null) throw new Exception("No element found!");
+        if (el is null) throw new Exception("No element found!");
 
         return JsonConvert.SerializeObject(el, Newtonsoft.Json.Formatting.Indented);
     }
@@ -39,7 +39,7 @@ public class XmlService : IXmlService
     public void UpdateValueForXpath(XmlDocument xml, string xpath, string value)
     {
         var el = xml.SelectSingleNode(xpath);
-        if (el == null) throw new Exception("No element found!");
+        if (el is null) throw new Exception("No element found!");
 
         if (el is XmlAttribute)
         {

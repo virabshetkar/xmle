@@ -54,7 +54,7 @@ public class ConfigService : IConfigService
 
             DirectoryInfo? parent = Directory.GetParent(cwd);
 
-            if (parent == null) return null;
+            if (parent is null) return null;
 
             cwd = parent.FullName;
         }

@@ -1,24 +1,35 @@
 using System.CommandLine;
-
+using Newtonsoft.Json;
 using xmle.Services;
+using xmle.Utils;
 
 namespace xmle.Commands;
 
 public class TestCommand : Command
 {
     private readonly IConfigService config;
+    private readonly ICsvParser csvParser;
+    private readonly TextWriter writer;
 
-    public TestCommand(IConfigService config) : base("test", "Temporary Command")
+    public Option<string> CsvPath { get; set; } = new("csvPath", "-f") { Required = true };
+
+    public TestCommand(IConfigService config, ICsvParser csvParser, TextWriter writer) : base("test", "Temporary Command")
     {
         this.config = config;
+        this.csvParser = csvParser;
+        this.writer = writer;
+
+        Add(CsvPath);
 
         SetAction(ActionHandler);
     }
 
     private void ActionHandler(ParseResult result)
     {
-        Console.WriteLine("Table: " + config.GetConfig()?.Table);
-        Console.WriteLine("Headings: " + string.Join(", ", config.GetConfig()?.Headings ?? []));
-        Console.WriteLine("XPaths: " + string.Join(", ", config.GetConfig()?.Columns ?? []));
+        var csvPath = result.GetValue(CsvPath);
+        var fullPath = FileUtil.GetFullPath(csvPath);
+
+        var data = csvParser.ReadCsv(fullPath);
+        writer.WriteLine(JsonConvert.SerializeObject(data, Formatting.Indented));
     }
 }

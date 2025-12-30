@@ -10,7 +10,7 @@ namespace xmle;
 
 public class Program
 {
-    public static async Task Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
         var services = new ServiceCollection();
         ConfigureServices(services);
@@ -23,7 +23,15 @@ public class Program
             rootCommand.Add((Command)provider.GetRequiredService(commandType));
         }
 
-        await rootCommand.Parse(args).InvokeAsync();
+        try
+        {
+            return await rootCommand.Parse(args).InvokeAsync(new() { EnableDefaultExceptionHandler = false });
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+            return ex.HResult;
+        }
     }
 
     public static void ConfigureServices(IServiceCollection services)

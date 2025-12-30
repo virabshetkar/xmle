@@ -1,6 +1,7 @@
 using System.CommandLine;
 
 using xmle.Services;
+using xmle.Utils;
 
 namespace xmle.Commands;
 
@@ -37,29 +38,16 @@ public class UpdateCommand : Command
     private async Task ActionHandler(ParseResult parseResult)
     {
         var xmlPath = parseResult.GetValue<string>("xmlPath");
-
-        xmlPath = Path.GetFullPath(xmlPath!);
-        if (!Path.Exists(xmlPath))
-        {
-            writer.WriteLine("Xml file does not exist!");
-            return;
-        }
+        xmlPath = FileUtil.GetFullPath(xmlPath!);
 
         var xpath = parseResult.GetValue(xpathOption)!;
         var value = parseResult.GetValue(valueOption)!;
 
         var xml = xmlService.GetRootXml(xmlPath);
 
-        try
-        {
-            xmlService.UpdateValueForXpath(xml, xpath, value);
-            writer.WriteLine("Updated the value");
+        xmlService.UpdateValueForXpath(xml, xpath, value);
+        writer.WriteLine("Updated the value");
 
-            xml.Save(xmlPath);
-        }
-        catch (Exception e)
-        {
-            writer.WriteLine(e.Message);
-        }
+        xml.Save(xmlPath);
     }
 }

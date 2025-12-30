@@ -2,6 +2,7 @@ using System.CommandLine;
 using System.Xml;
 
 using xmle.Services;
+using xmle.Utils;
 
 namespace xmle.Commands;
 
@@ -65,17 +66,12 @@ public class TableCommand : Command
 
         var xmlPath = result.GetValue<string>("xmlPath");
 
-        if (xmlPath == null)
+        if (xmlPath is null)
         {
             return;
         }
 
-        xmlPath = Path.GetFullPath(xmlPath);
-        if (!Path.Exists(xmlPath))
-        {
-            writer.WriteLine("XML path does not exist");
-            return;
-        }
+        xmlPath = FileUtil.GetFullPath(xmlPath);
 
         var xml = new XmlDocument();
         xml.Load(xmlPath);
