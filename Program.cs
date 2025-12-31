@@ -38,6 +38,7 @@ public class Program
     {
         services.AddSingleton<ICsvParser, CsvParser>();
         services.AddSingleton<IXmlService, XmlService>();
+        services.AddSingleton<INewXmlService, NewXmlService>();
         services.AddSingleton<IConfigService, ConfigService>();
 
         services.AddSingleton<TextWriter>(Console.Out);
