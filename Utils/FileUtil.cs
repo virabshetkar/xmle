@@ -12,4 +12,13 @@ public static class FileUtil
 
         return fullPath;
     }
+
+    public static string GetFullPath2(string? path)
+    {
+        if (string.IsNullOrEmpty(path)) throw new ArgumentNullException("Path is not given");
+
+        var fullPath = Path.GetFullPath(path);
+
+        return fullPath;
+    }
 }

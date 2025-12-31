@@ -1,6 +1,6 @@
 namespace xmle.Models;
 
-public record ViewXmlAsJsonDto
+public record ViewXmlAsJsonRequest
 (
     string xmlFilePath,
     string rootPath,

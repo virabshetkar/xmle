@@ -36,9 +36,9 @@ public class Program
 
     public static void ConfigureServices(IServiceCollection services)
     {
-        services.AddSingleton<ICsvParser, CsvParser>();
         services.AddSingleton<IXmlService, XmlService>();
-        services.AddSingleton<INewXmlService, NewXmlService>();
+        services.AddSingleton<IXmlToCsvService, XmlToCsvService>();
+        services.AddSingleton<ICsvService, CsvService>();
         services.AddSingleton<IConfigService, ConfigService>();
 
         services.AddSingleton<TextWriter>(Console.Out);
