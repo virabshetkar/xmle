@@ -1,4 +1,5 @@
 using System.CommandLine;
+
 using xmle.Models;
 using xmle.Services;
 
@@ -7,13 +8,13 @@ namespace xmle.Commands;
 public class XmlToCsvCommand : Command
 {
     private readonly IXmlToCsvService service;
-    private Argument<string> xmlPathArgument = new("xml-path") { };
-    private Argument<string> csvPathArgument = new("csv-path") { };
+    private readonly Argument<string> xmlPathArgument = new("xml-path") { };
+    private readonly Argument<string> csvPathArgument = new("csv-path") { };
 
-    private Option<string> rootPathOption = new("root-path", "-r", "--root") { Required = true };
-    private Option<string> rowPathOption = new("row-path", "-n", "--node") { Required = true };
-    private Option<string[]> columnPathsOption = new("col-paths", "-c", "--col") { Required = true };
-    private Option<string[]> titlesOption = new("titles", "-t", "--title") { Required = false };
+    private readonly Option<string> rootPathOption = new("root-path", "-r", "--root") { Required = true };
+    private readonly Option<string> rowPathOption = new("row-path", "-n", "--node") { Required = true };
+    private readonly Option<string[]> columnPathsOption = new("col-paths", "-c", "--col") { Required = true };
+    private readonly Option<string[]> titlesOption = new("titles", "-t", "--title") { Required = false };
 
     public XmlToCsvCommand(IXmlToCsvService service) : base("xml-csv", "Convert xml to csv")
     {
