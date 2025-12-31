@@ -11,13 +11,18 @@ public class XmlToCsvCommand : Command
     private readonly Argument<string> xmlPathArgument = new("xml-path") { };
     private readonly Argument<string> csvPathArgument = new("csv-path") { };
 
-    private readonly Option<string> rootPathOption = new("root-path", "-r", "--root") { Required = true };
-    private readonly Option<string> rowPathOption = new("row-path", "-n", "--node") { Required = true };
-    private readonly Option<string[]> columnPathsOption = new("col-paths", "-c", "--col") { Required = true };
-    private readonly Option<string[]> titlesOption = new("titles", "-t", "--title") { Required = false };
+    private readonly Option<string> rootPathOption;
+    private readonly Option<string> rowPathOption;
+    private readonly Option<string[]> columnPathsOption;
+    private readonly Option<string[]> titlesOption;
 
-    public XmlToCsvCommand(IXmlToCsvService service) : base("xml-csv", "Convert xml to csv")
+    public XmlToCsvCommand(IXmlToCsvService service, IConfigService config) : base("xml-csv", "Convert xml to csv")
     {
+        rootPathOption = new("root-path", "-r", "--root") { Required = true, DefaultValueFactory = res => config.GetConfig()?.RootPath ?? "" };
+        rowPathOption = new("row-path", "-n", "--node") { Required = true, DefaultValueFactory = res => config.GetConfig()?.RowPath ?? "" };
+        columnPathsOption = new("col-paths", "-c", "--col") { Required = true, DefaultValueFactory = res => config.GetConfig()?.ColumnPaths ?? [] };
+        titlesOption = new("titles", "-t", "--title") { Required = false, DefaultValueFactory = res => config.GetConfig()?.Titles ?? [] };
+
         Add(xmlPathArgument);
         Add(csvPathArgument);
 

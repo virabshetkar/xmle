@@ -9,10 +9,10 @@ public class UpdateXmlCommand : Command
     private readonly TextWriter writer;
     private readonly IXmlService xmlService;
 
-    public Argument<string> XmlPathArgument { get; set; } = new("xml-path") { };
+    private Argument<string> xmlPathArgument = new("xml-path") { };
 
-    public Option<string> XPathOption { get; set; } = new("xpath", "-x", "--xpath") { Required = true };
-    public Option<string> ValueOption { get; set; } = new("value", "-v", "--value") { Required = true };
+    private Option<string> xPathOption = new("xpath", "-x", "--xpath") { Required = true };
+    private Option<string> valueOption = new("value", "-v", "--value") { Required = true };
 
     public UpdateXmlCommand(IConfigService config, TextWriter writer, IXmlService xmlService) : base("update-xml", "Update the value at a given XPath")
     {
@@ -20,9 +20,9 @@ public class UpdateXmlCommand : Command
         this.writer = writer;
         this.xmlService = xmlService;
 
-        Add(XmlPathArgument);
-        Add(XPathOption);
-        Add(ValueOption);
+        Add(xmlPathArgument);
+        Add(xPathOption);
+        Add(valueOption);
 
         SetAction(ActionHandler);
     }
@@ -36,9 +36,9 @@ public class UpdateXmlCommand : Command
 
     private UpdateXmlRequest GetParsedValues(ParseResult result)
     {
-        string xmlFilePath = result.GetRequiredValue(XmlPathArgument);
-        string xPath = result.GetRequiredValue(XPathOption);
-        string value = result.GetRequiredValue(ValueOption);
+        string xmlFilePath = result.GetRequiredValue(xmlPathArgument);
+        string xPath = result.GetRequiredValue(xPathOption);
+        string value = result.GetRequiredValue(valueOption);
 
         return new UpdateXmlRequest(xmlFilePath, xPath, value);
     }

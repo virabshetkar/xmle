@@ -36,7 +36,6 @@ public class CsvService : ICsvService
         using (var reader = new StreamReader(csvPath))
         using (var csv = new CsvReader(reader, config))
         {
-            // Read first line and assume the header.
             csv.Read();
             csv.ReadHeader();
 

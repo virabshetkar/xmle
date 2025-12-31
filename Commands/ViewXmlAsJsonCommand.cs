@@ -5,39 +5,49 @@ using xmle.Services;
 
 public class ViewXmlAsJsonCommand : Command
 {
-    private readonly IConfigService config;
     private readonly TextWriter writer;
     private readonly IXmlService xmlService;
 
-    public Argument<string> XmlPathArgument { get; set; } = new("xml-path") { };
+    private Argument<string> xmlPathArgument = new("xml-path") { };
 
-    public Option<string> RootPathOption { get; set; } = new("root-path", "-r", "--root")
-    {
-        Required = true
-    };
-    public Option<string> RowPathOption { get; set; } = new("row-path", "-n", "--node")
-    {
-        Required = true
-    };
-    public Option<string[]> ColumnPathsOption { get; set; } = new("column-paths", "-c", "--col")
-    {
-        Required = true
-    };
-    public Option<string[]> TitlesOption { get; set; } = new("titles", "-t", "--title")
-    {
-    };
+    private Option<string> rootPathOption;
+    private Option<string> rowPathOption;
+    private Option<string[]> columnPathsOption;
+    private Option<string[]> titlesOption;
 
     public ViewXmlAsJsonCommand(IConfigService config, TextWriter writer, IXmlService xmlService) : base("view-xml", "View Xml as Json")
     {
-        this.config = config;
         this.writer = writer;
         this.xmlService = xmlService;
 
-        Add(XmlPathArgument);
-        Add(RootPathOption);
-        Add(RowPathOption);
-        Add(ColumnPathsOption);
-        Add(TitlesOption);
+        rootPathOption = new("root-path", "-r", "--root")
+        {
+            Required = true,
+            DefaultValueFactory = (res) => { return config.GetConfig()?.RootPath ?? ""; }
+        };
+
+        rowPathOption = new("row-path", "-n", "--node")
+        {
+            Required = true,
+            DefaultValueFactory = res => config.GetConfig()?.RowPath ?? ""
+        };
+
+        columnPathsOption = new("column-paths", "-c", "--col")
+        {
+            Required = true,
+            DefaultValueFactory = res => config.GetConfig()?.ColumnPaths ?? []
+        };
+
+        titlesOption = new("titles", "-t", "--title")
+        {
+            DefaultValueFactory = res => config.GetConfig()?.Titles ?? []
+        };
+
+        Add(xmlPathArgument);
+        Add(rootPathOption);
+        Add(rowPathOption);
+        Add(columnPathsOption);
+        Add(titlesOption);
 
         SetAction(ActionHandler);
     }
@@ -51,11 +61,11 @@ public class ViewXmlAsJsonCommand : Command
 
     private ViewXmlAsJsonRequest GetParsedValues(ParseResult result)
     {
-        string xmlPath = result.GetRequiredValue(XmlPathArgument);
-        string rootPath = result.GetRequiredValue(RootPathOption);
-        string rowPath = result.GetRequiredValue(RowPathOption);
-        string[] columnPaths = result.GetRequiredValue(ColumnPathsOption);
-        string[]? titles = result.GetValue(TitlesOption);
+        string xmlPath = result.GetRequiredValue(xmlPathArgument);
+        string rootPath = result.GetRequiredValue(rootPathOption);
+        string rowPath = result.GetRequiredValue(rowPathOption);
+        string[] columnPaths = result.GetRequiredValue(columnPathsOption);
+        string[]? titles = result.GetValue(titlesOption);
         return new ViewXmlAsJsonRequest(xmlPath, rootPath, rowPath, columnPaths, titles);
     }
 }

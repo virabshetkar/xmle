@@ -4,9 +4,10 @@ namespace xmle.Services;
 
 public class XmleConfiguration
 {
-    public string? Table { get; set; }
-    public string[]? Columns { get; set; }
-    public string[]? Headings { get; set; }
+    public string? RootPath { get; set; }
+    public string? RowPath { get; set; }
+    public string[]? ColumnPaths { get; set; }
+    public string[]? Titles { get; set; }
 }
 
 public interface IConfigService

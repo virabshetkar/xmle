@@ -5,18 +5,17 @@ using xmle.Services;
 
 public class ViewCsvAsJsonCommand : Command
 {
-    private readonly IConfigService config;
     private readonly TextWriter writer;
     private readonly ICsvService csvService;
 
-    public Argument<string> CsvPathArgument { get; set; } = new("csv-path") { };
+    private Argument<string> csvPathArgument = new("csv-path") { };
 
-    public ViewCsvAsJsonCommand(IConfigService config, TextWriter writer, xmle.Services.ICsvService csvService) : base("view-csv", "View Csv as Json")
+    public ViewCsvAsJsonCommand(TextWriter writer, xmle.Services.ICsvService csvService) : base("view-csv", "View Csv as Json")
     {
-        this.config = config;
         this.writer = writer;
         this.csvService = csvService;
-        Add(CsvPathArgument);
+
+        Add(csvPathArgument);
 
         SetAction(ActionHandler);
     }
@@ -30,7 +29,7 @@ public class ViewCsvAsJsonCommand : Command
 
     private ViewCsvAsJsonRequest GetParsedValues(ParseResult result)
     {
-        string csvPath = result.GetRequiredValue(CsvPathArgument);
+        string csvPath = result.GetRequiredValue(csvPathArgument);
         return new ViewCsvAsJsonRequest(csvPath);
     }
 }
