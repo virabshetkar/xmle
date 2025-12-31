@@ -1,8 +1,6 @@
 using System.CommandLine;
-using Newtonsoft.Json;
 using xmle.Models;
 using xmle.Services;
-using xmle.Utils;
 
 namespace xmle.Commands;
 
