@@ -7,8 +7,11 @@ public class RootCommandBuilder
 {
     public static RootCommand Build(IServiceProvider provider)
     {
-        var rootCommand = new RootCommand("A tool to edit XML files");
-        rootCommand.Action = new HelpAction();
+        var rootCommand = new RootCommand("A tool to edit XML files")
+        {
+            Action = new HelpAction()
+        };
+
         return rootCommand;
     }
 

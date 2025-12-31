@@ -198,6 +198,8 @@ publish/
 # in these scripts will be unencrypted
 PublishScripts/
 
+# Nuget Directory
+nupkg/
 # NuGet Packages
 *.nupkg
 # NuGet Symbol Packages
@@ -486,4 +488,5 @@ $RECYCLE.BIN/
 # Test files
 Test/Resources/
 Test/
-
+test.csv
+.xmle.json
